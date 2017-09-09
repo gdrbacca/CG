@@ -16,7 +16,7 @@ public class Main implements GLEventListener, KeyListener {
 	private ObjetoGrafico[] objetos = { 
 			new ObjetoGrafico(),
 			new ObjetoGrafico() };
-	
+	private int indiceObj = 0;
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -71,34 +71,34 @@ public class Main implements GLEventListener, KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_P:
-			objetos[0].exibeVertices();
+			objetos[indiceObj].exibeVertices();
 			break;
 		case KeyEvent.VK_M:
-			objetos[0].exibeMatriz();
+			objetos[indiceObj].exibeMatriz();
 			break;
 
 		case KeyEvent.VK_R:
-			objetos[0].atribuirIdentidade();
+			objetos[indiceObj].atribuirIdentidade();
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			objetos[0].translacaoXYZ(2.0,0.0,0.0);
+			objetos[indiceObj].translacaoXYZ(2.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_LEFT:
-			objetos[0].translacaoXYZ(-2.0,0.0,0.0);
+			objetos[indiceObj].translacaoXYZ(-2.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_UP:
-			objetos[0].translacaoXYZ(0.0,2.0,0.0);
+			objetos[indiceObj].translacaoXYZ(0.0,2.0,0.0);
 			break;
 		case KeyEvent.VK_DOWN:
-			objetos[0].translacaoXYZ(0.0,-2.0,0.0);
+			objetos[indiceObj].translacaoXYZ(0.0,-2.0,0.0);
 			break;
 
 		case KeyEvent.VK_PAGE_UP:
-			objetos[0].escalaXYZ(2.0,2.0);
+			objetos[indiceObj].escalaXYZ(2.0,2.0);
 			break;
 		case KeyEvent.VK_PAGE_DOWN:
-			objetos[0].escalaXYZ(0.5,0.5);
+			objetos[indiceObj].escalaXYZ(0.5,0.5);
 			break;
 
 		case KeyEvent.VK_HOME:
@@ -106,15 +106,21 @@ public class Main implements GLEventListener, KeyListener {
 			break;
 
 		case KeyEvent.VK_1:
-			objetos[0].escalaXYZPtoFixo(0.5, new Ponto4D(-15.0,-15.0,0.0,0.0));
+			objetos[indiceObj].escalaXYZPtoFixo(0.5, new Ponto4D(-15.0,-15.0,0.0,0.0));
 			break;
 			
 		case KeyEvent.VK_2:
-			objetos[0].escalaXYZPtoFixo(2.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
+			objetos[indiceObj].escalaXYZPtoFixo(2.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
 			break;
 			
 			case KeyEvent.VK_3:
-				objetos[0].rotacaoZPtoFixo(10.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
+				objetos[indiceObj].rotacaoZPtoFixo(10.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
+				break;
+		
+			case KeyEvent.VK_4:
+				indiceObj++;
+				if(indiceObj > objetos.length - 1)
+					indiceObj = 0;
 				break;
 		}
 
