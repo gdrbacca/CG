@@ -5,10 +5,10 @@ public final class ObjetoGrafico {
 
 	private int primitiva = GL.GL_LINE_LOOP;
 	private Ponto4D[] vertices = { 	
-			new Ponto4D(10.0, 10.0, 0.0, 1.0),
-			new Ponto4D(20.0, 10.0, 0.0, 1.0), 
-			new Ponto4D(20.0, 20.0, 0.0, 1.0),
-			new Ponto4D(10.0, 20.0, 0.0, 1.0) };
+			new Ponto4D(100.0, 100.0, 0.0, 1.0),
+			new Ponto4D(200.0, 100.0, 0.0, 1.0), 
+			new Ponto4D(200.0, 200.0, 0.0, 1.0),
+			new Ponto4D(100.0, 200.0, 0.0, 1.0) };
 
 //	private int primitiva = GL.GL_POINTS;
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
@@ -23,7 +23,11 @@ public final class ObjetoGrafico {
 	private static Transformacao4D matrizGlobal = new Transformacao4D();
 //	private double anguloGlobal = 0.0;
 	
+	private int cor = 0;
+	private float[][] matCores = new float[3][3];
+	
 	public ObjetoGrafico() {
+		initCores();
 	}
 
 	public void atribuirGL(GL gl) {
@@ -38,8 +42,27 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 	
+	private void initCores(){
+		this.matCores[0][0] = 0.0f;
+		this.matCores[0][1] = 0.0f;
+		this.matCores[0][2] = 0.0f;
+		this.matCores[1][0] = 1.0f;
+		this.matCores[1][1] = 1.0f;
+		this.matCores[1][2] = 0.0f;
+		this.matCores[2][0] = 0.0f;
+		this.matCores[2][1] = 1.0f;
+		this.matCores[2][2] = 1.0f;
+	}
+	
+	public void trocaCor(){
+		this.cor++;
+		if(this.cor > 2)
+			this.cor = 0;
+	}
+	
 	public void desenha() {
-		gl.glColor3f(0.0f, 0.0f, 0.0f);
+		
+		gl.glColor3f(matCores[cor][0], matCores[cor][1], matCores[cor][2]);
 		gl.glLineWidth(tamanho);
 		gl.glPointSize(tamanho);
 

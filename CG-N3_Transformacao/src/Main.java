@@ -36,7 +36,7 @@ public class Main implements GLEventListener, KeyListener {
 	// "render" feito pelo cliente OpenGL.
 	public void display(GLAutoDrawable arg0) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-		glu.gluOrtho2D(-30.0f, 30.0f, -30.0f, 30.0f);
+		glu.gluOrtho2D(-250.0f, 250.0f, -250.0f, 250.0f);
 
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -57,13 +57,13 @@ public class Main implements GLEventListener, KeyListener {
 	public void desenhaSRU() {
 		gl.glColor3f(1.0f, 0.0f, 0.0f);
 		gl.glBegin(GL.GL_LINES);
-			gl.glVertex2f(-20.0f, 0.0f);
-			gl.glVertex2f(20.0f, 0.0f);
+			gl.glVertex2f(-200.0f, 0.0f);
+			gl.glVertex2f(200.0f, 0.0f);
 		gl.glEnd();
 		gl.glColor3f(0.0f, 1.0f, 0.0f);
 		gl.glBegin(GL.GL_LINES);
-			gl.glVertex2f(0.0f, -20.0f);
-			gl.glVertex2f(0.0f, 20.0f);
+			gl.glVertex2f(0.0f, -200.0f);
+			gl.glVertex2f(0.0f, 200.0f);
 		gl.glEnd();
 	}
 	
@@ -82,16 +82,16 @@ public class Main implements GLEventListener, KeyListener {
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			objetos[indiceObj].translacaoXYZ(2.0,0.0,0.0);
+			objetos[indiceObj].translacaoXYZ(10.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_LEFT:
-			objetos[indiceObj].translacaoXYZ(-2.0,0.0,0.0);
+			objetos[indiceObj].translacaoXYZ(-10.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_UP:
-			objetos[indiceObj].translacaoXYZ(0.0,2.0,0.0);
+			objetos[indiceObj].translacaoXYZ(0.0,10.0,0.0);
 			break;
 		case KeyEvent.VK_DOWN:
-			objetos[indiceObj].translacaoXYZ(0.0,-2.0,0.0);
+			objetos[indiceObj].translacaoXYZ(0.0,-10.0,0.0);
 			break;
 
 		case KeyEvent.VK_PAGE_UP:
@@ -106,11 +106,11 @@ public class Main implements GLEventListener, KeyListener {
 			break;
 
 		case KeyEvent.VK_1:
-			objetos[indiceObj].escalaXYZPtoFixo(0.5, new Ponto4D(-15.0,-15.0,0.0,0.0));
+			objetos[indiceObj].escalaXYZPtoFixo(0.5, new Ponto4D(-150.0,-150.0,0.0,0.0));
 			break;
 			
 		case KeyEvent.VK_2:
-			objetos[indiceObj].escalaXYZPtoFixo(2.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
+			objetos[indiceObj].escalaXYZPtoFixo(2.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
 			break;
 			
 			case KeyEvent.VK_3:
@@ -121,6 +121,10 @@ public class Main implements GLEventListener, KeyListener {
 				indiceObj++;
 				if(indiceObj > objetos.length - 1)
 					indiceObj = 0;
+				break;
+			case KeyEvent.VK_5:
+				objetos[indiceObj].trocaCor();
+				System.out.println("oiodais");
 				break;
 		}
 
