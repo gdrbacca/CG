@@ -9,7 +9,7 @@ public class Frame extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	private Main renderer = new Main();
-	
+	//OI
 	private int janelaLargura  = 400, janelaAltura = 400;
 	
 	public Frame() {		
