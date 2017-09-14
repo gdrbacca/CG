@@ -1,5 +1,9 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
@@ -7,16 +11,22 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-public class Main implements GLEventListener, KeyListener {
+public class Main implements GLEventListener, KeyListener,
+							MouseListener, MouseMotionListener  {
 	private GL gl;
 	private GLU glu;
 	private GLAutoDrawable glDrawable;
 
 //	private ObjetoGrafico objeto = new ObjetoGrafico();
+	private ArrayList<ObjetoGrafico> objs = new ArrayList();
+	
 	private ObjetoGrafico[] objetos = { 
 			new ObjetoGrafico(),
 			new ObjetoGrafico() };
+	
+	
 	private int indiceObj = 0;
+	private boolean criaObj = false;
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -29,6 +39,8 @@ public class Main implements GLEventListener, KeyListener {
 		for (byte i=0; i < objetos.length; i++) {
 			objetos[i].atribuirGL(gl);
 		}
+		objs.add(objetos[0]);
+		objs.add(objetos[1]);
 //		objeto.atribuirGL(gl);
 	}
 
@@ -43,11 +55,11 @@ public class Main implements GLEventListener, KeyListener {
 
 		gl.glLineWidth(1.0f);
 		gl.glPointSize(1.0f);
-
 		desenhaSRU();
-		for (byte i=0; i < objetos.length; i++) {
-			objetos[i].desenha();
+		for (byte i=0; i < objs.size(); i++) {
+			objs.get(i).desenha();
 		}
+		//System.out.println("guiguigu");
 
 //		objeto.desenha();
 
@@ -71,34 +83,34 @@ public class Main implements GLEventListener, KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_P:
-			objetos[indiceObj].exibeVertices();
+			objs.get(indiceObj).exibeVertices();
 			break;
 		case KeyEvent.VK_M:
-			objetos[indiceObj].exibeMatriz();
+			objs.get(indiceObj).exibeMatriz();
 			break;
 
 		case KeyEvent.VK_R:
-			objetos[indiceObj].atribuirIdentidade();
+			objs.get(indiceObj).atribuirIdentidade();
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			objetos[indiceObj].translacaoXYZ(10.0,0.0,0.0);
+			objs.get(indiceObj).translacaoXYZ(10.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_LEFT:
-			objetos[indiceObj].translacaoXYZ(-10.0,0.0,0.0);
+			objs.get(indiceObj).translacaoXYZ(-10.0,0.0,0.0);
 			break;
 		case KeyEvent.VK_UP:
-			objetos[indiceObj].translacaoXYZ(0.0,10.0,0.0);
+			objs.get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
 			break;
 		case KeyEvent.VK_DOWN:
-			objetos[indiceObj].translacaoXYZ(0.0,-10.0,0.0);
+			objs.get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
 			break;
 
 		case KeyEvent.VK_PAGE_UP:
-			objetos[indiceObj].escalaXYZ(2.0,2.0);
+			objs.get(indiceObj).escalaXYZ(2.0,2.0);
 			break;
 		case KeyEvent.VK_PAGE_DOWN:
-			objetos[indiceObj].escalaXYZ(0.5,0.5);
+			objs.get(indiceObj).escalaXYZ(0.5,0.5);
 			break;
 
 		case KeyEvent.VK_HOME:
@@ -106,24 +118,24 @@ public class Main implements GLEventListener, KeyListener {
 			break;
 
 		case KeyEvent.VK_1:
-			objetos[indiceObj].escalaXYZPtoFixo(0.5, new Ponto4D(-150.0,-150.0,0.0,0.0));
+			objs.get(indiceObj).escalaXYZPtoFixo(0.5, new Ponto4D(-150.0,-150.0,0.0,0.0));
 			break;
 			
 		case KeyEvent.VK_2:
-			objetos[indiceObj].escalaXYZPtoFixo(2.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
+			objs.get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
 			break;
 			
 			case KeyEvent.VK_3:
-				objetos[indiceObj].rotacaoZPtoFixo(10.0, new Ponto4D(-15.0,-15.0,0.0,0.0));
+				objs.get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
 				break;
 		
 			case KeyEvent.VK_4:
 				indiceObj++;
-				if(indiceObj > objetos.length - 1)
+				if(indiceObj > objs.size() - 1)
 					indiceObj = 0;
 				break;
 			case KeyEvent.VK_5:
-				objetos[indiceObj].trocaCor();
+				objs.get(indiceObj).trocaCor();
 				System.out.println("oiodais");
 				break;
 		}
@@ -153,6 +165,44 @@ public class Main implements GLEventListener, KeyListener {
 
 	public void keyTyped(KeyEvent arg0) {
 		// System.out.println(" --- keyTyped ---");
+	}
+
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		glDrawable.display();
+	}
+
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		if(arg0.getButton() == MouseEvent.BUTTON3)
+			System.out.println("btn3");
+		else if(arg0.getButton() == MouseEvent.BUTTON1)
+			System.out.println("btn1");
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
