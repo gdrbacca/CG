@@ -1,14 +1,17 @@
+import java.util.ArrayList;
+
 import javax.media.opengl.GL;
 public final class ObjetoGrafico {
 	GL gl;
 	private float tamanho = 2.0f;
 
 	private int primitiva = GL.GL_LINE_LOOP;
-	private Ponto4D[] vertices = { 	
-			new Ponto4D(100.0, 100.0, 0.0, 1.0),
-			new Ponto4D(200.0, 100.0, 0.0, 1.0), 
-			new Ponto4D(200.0, 200.0, 0.0, 1.0),
-			new Ponto4D(100.0, 200.0, 0.0, 1.0) };
+	private ArrayList<Ponto4D> vertices = new ArrayList<Ponto4D>();
+//	private Ponto4D[] vertices = { 	
+//			new Ponto4D(100.0, 100.0, 0.0, 1.0),
+//			new Ponto4D(200.0, 100.0, 0.0, 1.0), 
+//			new Ponto4D(200.0, 200.0, 0.0, 1.0),
+//			new Ponto4D(100.0, 200.0, 0.0, 1.0) };
 
 //	private int primitiva = GL.GL_POINTS;
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
@@ -42,6 +45,25 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 	
+	public void addPonto(Ponto4D pto){
+		if(vertices.size()<=1){
+			System.out.println("adddou primeiro");
+			this.vertices.add(pto);
+			this.vertices.add(new Ponto4D(pto.obterX(), pto.obterY(), 0, 1));
+		}
+		else{
+			this.vertices.set(vertices.size()-1, pto);
+			this.vertices.add(new Ponto4D(pto.obterX(), pto.obterY(), 0, 1));
+		}
+	}
+	
+	public void deslizaPonto(double x, double y){
+		this.vertices.get(vertices.size()-1).atribuirX(x);
+		this.vertices.get(vertices.size()-1).atribuirY(y);
+//		System.out.println(vertices.get(vertices.size()-1).obterX());
+//		System.out.println(vertices.get(vertices.size()-1).obterY());
+	}
+	
 	private void initCores(){
 		this.matCores[0][0] = 0.0f;
 		this.matCores[0][1] = 0.0f;
@@ -69,8 +91,11 @@ public final class ObjetoGrafico {
 		gl.glPushMatrix();
 			gl.glMultMatrixd(matrizObjeto.GetDate(), 0);
 			gl.glBegin(primitiva);
-				for (byte i=0; i < vertices.length; i++) {
-					gl.glVertex2d(vertices[i].obterX(), vertices[i].obterY());
+//			System.out.println(vertices.size());
+//			System.out.println(vertices.get(0).obterX()+" "+vertices.get(0).obterY());
+//			System.out.println(vertices.get(1).obterX()+" "+vertices.get(1).obterY());
+				for (int i=0; i < vertices.size(); i++) {
+					gl.glVertex2d(vertices.get(i).obterX(), vertices.get(i).obterY());
 				}
 			gl.glEnd();
 
@@ -141,10 +166,10 @@ public final class ObjetoGrafico {
 	}
 
 	public void exibeVertices() {
-		System.out.println("P0[" + vertices[0].obterX() + "," + vertices[0].obterY() + "," + vertices[0].obterZ() + "," + vertices[0].obterW() + "]");
-		System.out.println("P1[" + vertices[1].obterX() + "," + vertices[1].obterY() + "," + vertices[1].obterZ() + "," + vertices[1].obterW() + "]");
-		System.out.println("P2[" + vertices[2].obterX() + "," + vertices[2].obterY() + "," + vertices[2].obterZ() + "," + vertices[2].obterW() + "]");
-		System.out.println("P3[" + vertices[3].obterX() + "," + vertices[3].obterY() + "," + vertices[3].obterZ() + "," + vertices[3].obterW() + "]");
+		for (int i = 0; i < vertices.size(); i++) {
+			System.out.println("P0[" + vertices.get(i).obterX() + "," + vertices.get(i).obterY()+ "]");
+		}
+//		
 //		System.out.println("anguloGlobal:" + anguloGlobal);
 	}
 
