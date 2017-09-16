@@ -101,10 +101,10 @@ public class Main implements GLEventListener, KeyListener,
 				objs.get(indiceObj).translacaoXYZ(-10.0,0.0,0.0);
 				break;
 			case KeyEvent.VK_UP:
-				objs.get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
+				objs.get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
 				break;
 			case KeyEvent.VK_DOWN:
-				objs.get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
+				objs.get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
 				break;
 	
 			case KeyEvent.VK_PAGE_UP:
@@ -119,30 +119,31 @@ public class Main implements GLEventListener, KeyListener,
 				break;
 	
 			case KeyEvent.VK_1:
-				objs.get(indiceObj).escalaXYZPtoFixo(0.5, new Ponto4D(-150.0,-150.0,0.0,0.0));
+				objs.get(indiceObj).escalaXYZPtoFixo(0.5, new Ponto4D(-200.0,-200.0,0.0,0.0));
 				break;
 				
 			case KeyEvent.VK_2:
-				objs.get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
+				objs.get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-200.0,-200.0,0.0,0.0));
 				break;
 				
-				case KeyEvent.VK_3:
-					objs.get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-150.0,-150.0,0.0,0.0));
-					break;
+			case KeyEvent.VK_3:
+				objs.get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-200.0,-189.0,0.0,0.0));
+				break;
 			
-				case KeyEvent.VK_4:
-					indiceObj++;
-					if(indiceObj > objs.size() - 1)
-						indiceObj = 0;
-					break;
-				case KeyEvent.VK_5:
-					objs.get(indiceObj).trocaCor();
-					System.out.println("oiodais");
-					break;
-				case KeyEvent.VK_SPACE:
-					System.out.println("espaço");
-					criaObj = false;
-					break;
+			case KeyEvent.VK_4:
+				indiceObj++;
+				if(indiceObj > objs.size() - 1)
+					indiceObj = 0;
+				break;
+				
+			case KeyEvent.VK_5:
+				objs.get(indiceObj).trocaCor();
+				break;
+				
+			case KeyEvent.VK_SPACE:
+				//System.out.println("espaço");
+				criaObj = false;
+				break;
 			}
 		}
 
@@ -193,13 +194,12 @@ public class Main implements GLEventListener, KeyListener,
 			//System.out.println("btn3");
 			Ponto4D pto = new Ponto4D(arg0.getX(), arg0.getY(), 0, 1);
 			if(!criaObj){
-				indiceObj++;
 				criaObj = true;
 				ObjetoGrafico obj = new ObjetoGrafico();
 				obj.atribuirGL(gl);
 				obj.addPonto(pto);
-				//obj.addPonto(new Ponto4D(arg0.getX(), arg0.getY(), 0, 1));
 				objs.add(obj);
+				indiceObj = objs.size()-1;
 			}
 			else{
 				objs.get(objs.size()-1).addPonto(pto);
