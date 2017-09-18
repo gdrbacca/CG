@@ -41,6 +41,13 @@ public final class ObjetoGrafico {
 		return tamanho;
 	}
 
+	public void trocarPrimitiva(){
+		if(primitiva == GL.GL_LINE_LOOP)
+			primitiva = GL.GL_LINE_STRIP;
+		else
+			primitiva = GL.GL_LINE_LOOP;
+	}
+	
 	public double obterPrimitava() {
 		return primitiva;
 	}

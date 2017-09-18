@@ -27,6 +27,7 @@ public class Main implements GLEventListener, KeyListener,
 	
 	private int indiceObj = -1;
 	private boolean criaObj = false;
+	private boolean selectVertice = false;
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -94,6 +95,19 @@ public class Main implements GLEventListener, KeyListener,
 				objs.get(indiceObj).atribuirIdentidade();
 				break;
 	
+			case KeyEvent.VK_Q:
+				selectVertice = !selectVertice;
+				break;	
+				
+			case KeyEvent.VK_D:
+				objs.remove(indiceObj);
+				indiceObj = objs.size()-1;
+				break;
+				
+			case KeyEvent.VK_A:
+				objs.get(indiceObj).trocarPrimitiva();;
+				break;	
+				
 			case KeyEvent.VK_RIGHT:
 				objs.get(indiceObj).translacaoXYZ(10.0,0.0,0.0);
 				break;
@@ -191,18 +205,19 @@ public class Main implements GLEventListener, KeyListener,
 		// TODO Auto-generated method stub
 		System.out.println((arg0.getX())+" "+(arg0.getY()));
 		if(arg0.getButton() == MouseEvent.BUTTON1){
-			//System.out.println("btn3");
-			Ponto4D pto = new Ponto4D(arg0.getX(), arg0.getY(), 0, 1);
-			if(!criaObj){
-				criaObj = true;
-				ObjetoGrafico obj = new ObjetoGrafico();
-				obj.atribuirGL(gl);
-				obj.addPonto(pto);
-				objs.add(obj);
-				indiceObj = objs.size()-1;
-			}
-			else{
-				objs.get(objs.size()-1).addPonto(pto);
+			if(!selectVertice){
+				Ponto4D pto = new Ponto4D(arg0.getX(), arg0.getY(), 0, 1);
+				if(!criaObj){
+					criaObj = true;
+					ObjetoGrafico obj = new ObjetoGrafico();
+					obj.atribuirGL(gl);
+					obj.addPonto(pto);
+					objs.add(obj);
+					indiceObj = objs.size()-1;
+				}
+				else{
+					objs.get(objs.size()-1).addPonto(pto);
+				}
 			}
 		}
 		else if(arg0.getButton() == MouseEvent.BUTTON3)
