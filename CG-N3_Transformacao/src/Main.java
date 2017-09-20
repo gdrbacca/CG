@@ -11,14 +11,14 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-public class Main implements GLEventListener, KeyListener,
-							MouseListener, MouseMotionListener  {
+public class Main implements KeyListener,
+							MouseListener, MouseMotionListener, GLEventListener  {
 	private GL gl;
 	private GLU glu;
 	private GLAutoDrawable glDrawable;
 
 //	private ObjetoGrafico objeto = new ObjetoGrafico();
-	private ArrayList<ObjetoGrafico> objs = new ArrayList<ObjetoGrafico>();
+	//private ArrayList<ObjetoGrafico> objs = new ArrayList<ObjetoGrafico>();
 	
 //	private ObjetoGrafico[] objetos = { 
 //			new ObjetoGrafico(),
@@ -28,25 +28,27 @@ public class Main implements GLEventListener, KeyListener,
 	private int indiceObj = -1;
 	private boolean criaObj = false;
 	private boolean selectVertice = false;
+	private Mundo mundo = new Mundo();
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
+
+
+	// metodo definido na interface GLEventListener.
+	// "render" feito pelo cliente OpenGL.
+
+
+	
+	@Override
 	public void init(GLAutoDrawable drawable) {
+		// TODO Auto-generated method stub
 		glDrawable = drawable;
 		gl = drawable.getGL();
 		glu = new GLU();
 		glDrawable.setGL(new DebugGL(gl));
 
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-//		for (byte i=0; i < objetos.length; i++) {
-//			objetos[i].atribuirGL(gl);
-//		}
-		//objs.add(objetos[0]);
-		//objs.add(objetos[1]);
-//		objeto.atribuirGL(gl);
 	}
-
-	// metodo definido na interface GLEventListener.
-	// "render" feito pelo cliente OpenGL.
+	
+	@Override
 	public void display(GLAutoDrawable arg0) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 		glu.gluOrtho2D(0.0f, 400.0f, 378.0f, 0.0f);
@@ -56,9 +58,9 @@ public class Main implements GLEventListener, KeyListener,
 
 		gl.glLineWidth(1.0f);
 		gl.glPointSize(1.0f);
-		desenhaSRU();
-		for (byte i=0; i < objs.size(); i++) {
-			objs.get(i).desenha();
+		//desenhaSRU();
+		for (byte i=0; i < mundo.getObjeto().size(); i++) {
+			mundo.getObjeto().get(i).desenha();
 		}
 		//System.out.println("guiguigu");
 
@@ -67,32 +69,35 @@ public class Main implements GLEventListener, KeyListener,
 		gl.glFlush();
 	}
 
-	public void desenhaSRU() {
-		gl.glColor3f(1.0f, 0.0f, 0.0f);
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex2f(100.0f, 200.0f);
-			gl.glVertex2f(300.0f, 200.0f);
-		gl.glEnd();
-		gl.glColor3f(0.0f, 1.0f, 0.0f);
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex2f(200.0f, 100.0f);
-			gl.glVertex2f(200.0f, 300.0f);
-		gl.glEnd();
+	@Override
+	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	@Override
+	public void reshape(GLAutoDrawable arg0, int x, int y, int width, int height) {
+		gl.glViewport(0, 0, width, height);
+        gl.glMatrixMode(GL.GL_PROJECTION);
+        gl.glLoadIdentity();
+		
 	}
 	
 	public void keyPressed(KeyEvent e) {
 
-		if(objs.size() > 0){
+		if(mundo.getObjeto().size() > 0){
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_P:
-				objs.get(indiceObj).exibeVertices();
+				mundo.getObjeto().get(indiceObj).exibeVertices();
 				break;
 			case KeyEvent.VK_M:
-				objs.get(indiceObj).exibeMatriz();
+				mundo.getObjeto().get(indiceObj).exibeMatriz();
 				break;
 	
 			case KeyEvent.VK_R:
-				objs.get(indiceObj).atribuirIdentidade();
+				mundo.getObjeto().get(indiceObj).atribuirIdentidade();
 				break;
 	
 			case KeyEvent.VK_Q:
@@ -100,32 +105,32 @@ public class Main implements GLEventListener, KeyListener,
 				break;	
 				
 			case KeyEvent.VK_D:
-				objs.remove(indiceObj);
-				indiceObj = objs.size()-1;
+				mundo.getObjeto().remove(indiceObj);
+				indiceObj = mundo.getObjeto().size()-1;
 				break;
 				
 			case KeyEvent.VK_A:
-				objs.get(indiceObj).trocarPrimitiva();;
+				mundo.getObjeto().get(indiceObj).trocarPrimitiva();;
 				break;	
 				
 			case KeyEvent.VK_RIGHT:
-				objs.get(indiceObj).translacaoXYZ(10.0,0.0,0.0);
+				mundo.getObjeto().get(indiceObj).translacaoXYZ(10.0,0.0,0.0);
 				break;
 			case KeyEvent.VK_LEFT:
-				objs.get(indiceObj).translacaoXYZ(-10.0,0.0,0.0);
+				mundo.getObjeto().get(indiceObj).translacaoXYZ(-10.0,0.0,0.0);
 				break;
 			case KeyEvent.VK_UP:
-				objs.get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
+				mundo.getObjeto().get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
 				break;
 			case KeyEvent.VK_DOWN:
-				objs.get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
+				mundo.getObjeto().get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
 				break;
 	
 			case KeyEvent.VK_PAGE_UP:
-				objs.get(indiceObj).escalaXYZ(2.0,2.0);
+				mundo.getObjeto().get(indiceObj).escalaXYZ(2.0,2.0);
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
-				objs.get(indiceObj).escalaXYZ(0.5,0.5);
+				mundo.getObjeto().get(indiceObj).escalaXYZ(0.5,0.5);
 				break;
 	
 			case KeyEvent.VK_HOME:
@@ -133,25 +138,25 @@ public class Main implements GLEventListener, KeyListener,
 				break;
 	
 			case KeyEvent.VK_1:
-				objs.get(indiceObj).escalaXYZPtoFixo(0.5, new Ponto4D(-200.0,-200.0,0.0,0.0));
+				mundo.getObjeto().get(indiceObj).escalaXYZPtoFixo(0.5, new Ponto4D(-200.0,-200.0,0.0,0.0));
 				break;
 				
 			case KeyEvent.VK_2:
-				objs.get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-200.0,-200.0,0.0,0.0));
+				mundo.getObjeto().get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-200.0,-200.0,0.0,0.0));
 				break;
 				
 			case KeyEvent.VK_3:
-				objs.get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-200.0,-189.0,0.0,0.0));
+				mundo.getObjeto().get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-200.0,-189.0,0.0,0.0));
 				break;
 			
 			case KeyEvent.VK_4:
 				indiceObj++;
-				if(indiceObj > objs.size() - 1)
+				if(indiceObj > mundo.getObjeto().size() - 1)
 					indiceObj = 0;
 				break;
 				
 			case KeyEvent.VK_5:
-				objs.get(indiceObj).trocaCor();
+				mundo.getObjeto().get(indiceObj).trocaCor();
 				break;
 				
 			case KeyEvent.VK_SPACE:
@@ -166,19 +171,12 @@ public class Main implements GLEventListener, KeyListener,
 
 	// metodo definido na interface GLEventListener.
 	// "render" feito depois que a janela foi redimensionada.
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-	    gl.glViewport(0, 0, width, height);
-        gl.glMatrixMode(GL.GL_PROJECTION);
-        gl.glLoadIdentity();
-		// System.out.println(" --- reshape ---");
-	}
+
 
 	// metodo definido na interface GLEventListener.
 	// "render" feito quando o modo ou dispositivo de exibicao associado foi
 	// alterado.
-	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
-		// System.out.println(" --- displayChanged ---");
-	}
+
 
 	public void keyReleased(KeyEvent arg0) {
 		// System.out.println(" --- keyReleased ---");
@@ -195,8 +193,8 @@ public class Main implements GLEventListener, KeyListener,
 
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		if(objs.size() > 0 && criaObj){
-			objs.get(objs.size()-1).deslizaPonto(arg0.getX(), arg0.getY());
+		if(mundo.getObjeto().size() > 0 && criaObj){
+			mundo.getObjeto().get(mundo.getObjeto().size()-1).deslizaPonto(arg0.getX(), arg0.getY());
 			glDrawable.display();
 		}
 	}
@@ -212,11 +210,11 @@ public class Main implements GLEventListener, KeyListener,
 					ObjetoGrafico obj = new ObjetoGrafico();
 					obj.atribuirGL(gl);
 					obj.addPonto(pto);
-					objs.add(obj);
-					indiceObj = objs.size()-1;
+					mundo.getObjeto().add(obj);
+					indiceObj = mundo.getObjeto().size()-1;
 				}
 				else{
-					objs.get(objs.size()-1).addPonto(pto);
+					mundo.getObjeto().get(mundo.getObjeto().size()-1).addPonto(pto);
 				}
 			}
 		}
@@ -244,6 +242,19 @@ public class Main implements GLEventListener, KeyListener,
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void desenhaSRU() {
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex2f(100.0f, 200.0f);
+			gl.glVertex2f(300.0f, 200.0f);
+		gl.glEnd();
+		gl.glColor3f(0.0f, 1.0f, 0.0f);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex2f(200.0f, 100.0f);
+			gl.glVertex2f(200.0f, 300.0f);
+		gl.glEnd();
 	}
 
 }
