@@ -59,9 +59,7 @@ public class Main implements KeyListener,
 		gl.glLineWidth(1.0f);
 		gl.glPointSize(1.0f);
 		//desenhaSRU();
-		for (byte i=0; i < mundo.getObjeto().size(); i++) {
-			mundo.getObjeto().get(i).desenha();
-		}
+		mundo.desenha();
 		//System.out.println("guiguigu");
 
 //		objeto.desenha();
@@ -127,7 +125,7 @@ public class Main implements KeyListener,
 				break;
 	
 			case KeyEvent.VK_PAGE_UP:
-				mundo.getObjeto().get(indiceObj).escalaXYZ(2.0,2.0);
+				mundo.getObjeto().get(indiceObj).escalaXYZ(1.5,1.5);
 				break;
 			case KeyEvent.VK_PAGE_DOWN:
 				mundo.getObjeto().get(indiceObj).escalaXYZ(0.5,0.5);
@@ -194,7 +192,7 @@ public class Main implements KeyListener,
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if(mundo.getObjeto().size() > 0 && criaObj){
-			mundo.getObjeto().get(mundo.getObjeto().size()-1).deslizaPonto(arg0.getX(), arg0.getY());
+			mundo.deslizaPontoObj(arg0.getX(), arg0.getY());
 			glDrawable.display();
 		}
 	}
@@ -204,22 +202,14 @@ public class Main implements KeyListener,
 		System.out.println((arg0.getX())+" "+(arg0.getY()));
 		if(arg0.getButton() == MouseEvent.BUTTON1){
 			if(!selectVertice){
-				Ponto4D pto = new Ponto4D(arg0.getX(), arg0.getY(), 0, 1);
+				indiceObj = mundo.criaObj(criaObj, arg0.getX(), arg0.getY(), gl, indiceObj);
 				if(!criaObj){
 					criaObj = true;
-					ObjetoGrafico obj = new ObjetoGrafico();
-					obj.atribuirGL(gl);
-					obj.addPonto(pto);
-					mundo.getObjeto().add(obj);
-					indiceObj = mundo.getObjeto().size()-1;
-				}
-				else{
-					mundo.getObjeto().get(mundo.getObjeto().size()-1).addPonto(pto);
 				}
 			}
 		}
 		else if(arg0.getButton() == MouseEvent.BUTTON3)
-			System.out.println("btn1");
+			System.out.println("btn3");
 		
 		glDrawable.display();
 	}

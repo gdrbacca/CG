@@ -28,10 +28,33 @@ public class Mundo{
 		return this.objs;
 	}
 	
+	public void desenha(){
+		for (byte i=0; i < objs.size(); i++) {
+			objs.get(i).desenha();
+		}
+	}
+	
+	public int criaObj(boolean cria, int x, int y, GL gl, int indiceObj){
+		Ponto4D pto = new Ponto4D(x, y, 0, 1);
+		int indice = indiceObj;
+		if(!cria){
+			ObjetoGrafico obj = new ObjetoGrafico();
+			obj.atribuirGL(gl);
+			obj.addPonto(pto);
+			objs.add(obj);
+			indice = objs.size()-1;
+			return indice;
+		}
+		else{
+			objs.get(objs.size()-1).addPonto(pto);
+			return indice;
+		}
+	}
 
-
-
-
+	
+	public void deslizaPontoObj(int x, int y){
+		objs.get(objs.size()-1).deslizaPonto(x, y);
+	}
 	
 	
 
