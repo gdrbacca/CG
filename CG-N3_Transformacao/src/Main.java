@@ -159,7 +159,11 @@ public class Main implements KeyListener,
 				
 			case KeyEvent.VK_SPACE:
 				//System.out.println("espaço");
-				criaObj = false;
+				if(criaObj){
+					criaObj = false;
+					mundo.atribuirBbox();
+					mundo.atribuiSelecionado(indiceObj);
+				}
 				break;
 			}
 		}

@@ -51,6 +51,18 @@ public class Mundo{
 		}
 	}
 
+	public void atribuirBbox(){
+		objs.get(objs.size()-1).atribuirBbox();
+	}
+	
+	public void atribuiSelecionado(int indice){
+		for (int i = 0; i < objs.size(); i++) {
+			if(i == indice)
+				objs.get(i).setSelecionado(true);
+			else
+				objs.get(i).setSelecionado(false);
+		}
+	}
 	
 	public void deslizaPontoObj(int x, int y){
 		objs.get(objs.size()-1).deslizaPonto(x, y);

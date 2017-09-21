@@ -17,7 +17,8 @@ public final class ObjetoGrafico {
 //	private Ponto4D[] vertices = { new Ponto4D(10.0, 10.0, 0.0, 1.0) };	
 
 	private Transformacao4D matrizObjeto = new Transformacao4D();
-
+	private BoundingBox bbox = null;
+	
 	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
 	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
 	private static Transformacao4D matrizTmpTranslacaoInversa = new Transformacao4D();
@@ -28,6 +29,7 @@ public final class ObjetoGrafico {
 	
 	private int cor = 0;
 	private float[][] matCores = new float[3][3];
+	private boolean selecionado = false;
 	
 	public ObjetoGrafico() {
 		initCores();
@@ -41,6 +43,10 @@ public final class ObjetoGrafico {
 		return tamanho;
 	}
 
+	public void setSelecionado(boolean selecionado){
+		this.selecionado = selecionado;
+	}
+	
 	public void trocarPrimitiva(){
 		if(primitiva == GL.GL_LINE_LOOP)
 			primitiva = GL.GL_LINE_STRIP;
@@ -69,6 +75,11 @@ public final class ObjetoGrafico {
 		this.vertices.get(vertices.size()-1).atribuirY(y);
 //		System.out.println(vertices.get(vertices.size()-1).obterX());
 //		System.out.println(vertices.get(vertices.size()-1).obterY());
+	}
+	
+	public void atribuirBbox(){
+		this.bbox = new BoundingBox();
+		this.bbox.atribuirBoundingBox(vertices);
 	}
 	
 	private void initCores(){
@@ -105,6 +116,9 @@ public final class ObjetoGrafico {
 					gl.glVertex2d(vertices.get(i).obterX(), vertices.get(i).obterY());
 				}
 			gl.glEnd();
+			if(selecionado){
+				bbox.desenharOpenGLBBox(gl);
+			}
 
 			//////////// ATENCAO: chamar desenho dos filhos... 
 
