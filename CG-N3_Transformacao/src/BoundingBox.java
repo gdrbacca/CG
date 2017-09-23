@@ -37,23 +37,24 @@ public final class BoundingBox {
 	}
 		
 	public void atribuirBoundingBox(ArrayList<Ponto4D> arrayPtos){
+		this.menorX = arrayPtos.get(0).obterX();
+		this.menorY = arrayPtos.get(0).obterY();
 		for(Ponto4D ptos : arrayPtos){
 			System.out.println("size:");
 			
-			//atualizarBBox(ptos);
 			if(ptos.obterX() > this.maiorX)
 				this.maiorX = ptos.obterX();
-			else
+			else if(ptos.obterX() < this.menorX)
 				this.menorX = ptos.obterX();
 			
-			if(ptos.obterY() < this.menorY)
-				this.menorY = ptos.obterY();
-			else
+			if(ptos.obterY() > this.maiorY)
 				this.maiorY = ptos.obterY();
+			else if(ptos.obterY() < this.menorY)
+				this.menorY = ptos.obterY();
 			
 			if(ptos.obterZ() > this.maiorZ)
 				this.maiorZ = ptos.obterZ();
-			else
+			else if(ptos.obterZ() < this.menorZ)
 				this.menorZ = ptos.obterZ();
 		}
 		System.out.println("maior x: "+this.maiorX);

@@ -105,6 +105,7 @@ public class Main implements KeyListener,
 			case KeyEvent.VK_D:
 				mundo.getObjeto().remove(indiceObj);
 				indiceObj = mundo.getObjeto().size()-1;
+				mundo.atribuiSelecionado(indiceObj);
 				break;
 				
 			case KeyEvent.VK_A:
@@ -151,6 +152,7 @@ public class Main implements KeyListener,
 				indiceObj++;
 				if(indiceObj > mundo.getObjeto().size() - 1)
 					indiceObj = 0;
+				mundo.atribuiSelecionado(indiceObj);
 				break;
 				
 			case KeyEvent.VK_5:
