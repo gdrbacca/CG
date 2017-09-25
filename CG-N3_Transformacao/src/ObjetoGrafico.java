@@ -18,6 +18,7 @@ public final class ObjetoGrafico {
 
 	private Transformacao4D matrizObjeto = new Transformacao4D();
 	private BoundingBox bbox = null;
+	private Ponto4D pontoSelecionado = null;
 	
 	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
 	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
@@ -28,8 +29,9 @@ public final class ObjetoGrafico {
 //	private double anguloGlobal = 0.0;
 	
 	private int cor = 0;
-	private float[][] matCores = new float[3][3];
+	private float[][] matCores = new float[4][4];
 	private boolean selecionado = false;
+	private boolean desenhaPonto = false;
 	
 	public ObjetoGrafico() {
 		initCores();
@@ -92,12 +94,38 @@ public final class ObjetoGrafico {
 		this.matCores[2][0] = 0.0f;
 		this.matCores[2][1] = 1.0f;
 		this.matCores[2][2] = 1.0f;
+		this.matCores[3][0] = 1.0f;
+		this.matCores[3][1] = 0.0f;
+		this.matCores[3][2] = 0.5f;
 	}
 	
 	public void trocaCor(){
 		this.cor++;
-		if(this.cor > 2)
+		if(this.cor > 3)
 			this.cor = 0;
+	}
+	
+	public void selecionaPonto(int x, int y){
+		double maiorD = Double.MAX_VALUE;
+		pontoSelecionado = new Ponto4D();
+		for(Ponto4D ptos : vertices){
+			double p = Math.pow((ptos.obterX() - x), 2);
+			double p2 = Math.pow((ptos.obterY() - y), 2);
+			double d = Math.sqrt(p + p2);
+			if(d < maiorD){
+				maiorD = d;
+				pontoSelecionado.atribuirX(ptos.obterX());
+				pontoSelecionado.atribuirY(ptos.obterY());
+				pontoSelecionado.atribuirZ(0);
+			}
+		}
+	}
+	
+	public void desenharPonto(boolean desenhar, int x, int y){
+		this.desenhaPonto = desenhar;
+		if(desenhaPonto){
+			selecionaPonto(x, y);			
+		}
 	}
 	
 	public void desenha() {
@@ -119,7 +147,15 @@ public final class ObjetoGrafico {
 			if(selecionado){
 				bbox.desenharOpenGLBBox(gl);
 			}
-
+			if(desenhaPonto && pontoSelecionado != null){
+				gl.glPointSize(10.0f);
+				gl.glBegin(GL.GL_POINTS);
+					gl.glVertex2d(pontoSelecionado.obterX(), pontoSelecionado.obterY());
+				gl.glEnd();
+				
+				pontoSelecionado = null;
+				desenhaPonto = false;
+			}
 			//////////// ATENCAO: chamar desenho dos filhos... 
 
 		gl.glPopMatrix();

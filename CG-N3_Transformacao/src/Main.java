@@ -213,6 +213,9 @@ public class Main implements KeyListener,
 					criaObj = true;
 				}
 			}
+			else{
+				mundo.selecionaPonto(true, indiceObj, arg0.getX(), arg0.getY());
+			}
 		}
 		else if(arg0.getButton() == MouseEvent.BUTTON3)
 			System.out.println("btn3");
