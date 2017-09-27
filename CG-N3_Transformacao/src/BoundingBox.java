@@ -37,6 +37,7 @@ public final class BoundingBox {
 	}
 		
 	public void atribuirBoundingBox(ArrayList<Ponto4D> arrayPtos){
+		System.err.println(arrayPtos.size());
 		this.menorX = arrayPtos.get(0).obterX();
 		this.menorY = arrayPtos.get(0).obterY();
 		for(Ponto4D ptos : arrayPtos){

@@ -114,17 +114,27 @@ public final class ObjetoGrafico {
 			double d = Math.sqrt(p + p2);
 			if(d < maiorD){
 				maiorD = d;
-				pontoSelecionado.atribuirX(ptos.obterX());
-				pontoSelecionado.atribuirY(ptos.obterY());
-				pontoSelecionado.atribuirZ(0);
+				pontoSelecionado = ptos;
+				//pontoSelecionado.atribuirX(ptos.obterX());
+				//pontoSelecionado.atribuirY(ptos.obterY());
+				//pontoSelecionado.atribuirZ(0);
 			}
 		}
 	}
 	
-	public void desenharPonto(boolean desenhar, int x, int y){
-		this.desenhaPonto = desenhar;
-		if(desenhaPonto){
-			selecionaPonto(x, y);			
+	public void desenharPonto(int x, int y){
+		this.desenhaPonto = true;
+		selecionaPonto(x, y);			
+	}
+	
+	public void deletarPonto(){
+		if(pontoSelecionado != null){
+			//System.out.println("ponto removido: "+pontoSelecionado.obterX()+" "+
+			//pontoSelecionado.obterY()+" "+vertices.remove(pontoSelecionado));
+			vertices.remove(pontoSelecionado);
+			bbox = new BoundingBox();
+			bbox.atribuirBoundingBox(vertices);
+			pontoSelecionado = null;
 		}
 	}
 	
@@ -153,7 +163,7 @@ public final class ObjetoGrafico {
 					gl.glVertex2d(pontoSelecionado.obterX(), pontoSelecionado.obterY());
 				gl.glEnd();
 				
-				pontoSelecionado = null;
+				//pontoSelecionado = null;
 				desenhaPonto = false;
 			}
 			//////////// ATENCAO: chamar desenho dos filhos... 

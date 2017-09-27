@@ -103,9 +103,13 @@ public class Main implements KeyListener,
 				break;	
 				
 			case KeyEvent.VK_D:
-				mundo.getObjeto().remove(indiceObj);
-				indiceObj = mundo.getObjeto().size()-1;
-				mundo.atribuiSelecionado(indiceObj);
+				if(!selectVertice){
+					mundo.getObjeto().remove(indiceObj);
+					indiceObj = mundo.getObjeto().size()-1;
+					mundo.atribuiSelecionado(indiceObj);
+				} else{
+					mundo.deletaPonto(indiceObj);
+				}
 				break;
 				
 			case KeyEvent.VK_A:
@@ -214,7 +218,7 @@ public class Main implements KeyListener,
 				}
 			}
 			else{
-				mundo.selecionaPonto(true, indiceObj, arg0.getX(), arg0.getY());
+				mundo.selecionaPonto(indiceObj, arg0.getX(), arg0.getY());
 			}
 		}
 		else if(arg0.getButton() == MouseEvent.BUTTON3)

@@ -68,10 +68,13 @@ public class Mundo{
 		objs.get(objs.size()-1).deslizaPonto(x, y);
 	}
 	
-	public void selecionaPonto(boolean seleciona, int indice, int x, int y){
-		objs.get(indice).desenharPonto(seleciona, x, y);
+	public void selecionaPonto(int indice, int x, int y){
+		objs.get(indice).desenharPonto(x, y);
 	}
-
+	
+	public void deletaPonto(int indice){
+		objs.get(indice).deletarPonto();
+	}
 
 	
 	
