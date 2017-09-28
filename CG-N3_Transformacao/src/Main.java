@@ -196,7 +196,10 @@ public class Main implements KeyListener,
 
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if(selectVertice){
+			mundo.movePonto(indiceObj, arg0.getX(), arg0.getY());
+			glDrawable.display();
+		}
 	}
 
 	public void mouseMoved(MouseEvent arg0) {

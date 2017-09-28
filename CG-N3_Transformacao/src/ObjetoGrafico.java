@@ -131,10 +131,22 @@ public final class ObjetoGrafico {
 		if(pontoSelecionado != null){
 			//System.out.println("ponto removido: "+pontoSelecionado.obterX()+" "+
 			//pontoSelecionado.obterY()+" "+vertices.remove(pontoSelecionado));
-			vertices.remove(pontoSelecionado);
-			bbox = new BoundingBox();
+			if(vertices.size() > 3){
+				vertices.remove(pontoSelecionado);
+				bbox.atribuirBoundingBox(vertices);
+				pontoSelecionado = null;
+			}
+			else
+				desenhaPonto = true;
+		}
+	}
+	
+	public void movePonto(int x, int y){
+		if(pontoSelecionado != null){
+			pontoSelecionado.atribuirX(x);
+			pontoSelecionado.atribuirY(y);
 			bbox.atribuirBoundingBox(vertices);
-			pontoSelecionado = null;
+			desenhaPonto = true;
 		}
 	}
 	

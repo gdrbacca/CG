@@ -72,6 +72,10 @@ public class Mundo{
 		objs.get(indice).desenharPonto(x, y);
 	}
 	
+	public void movePonto(int indice, int x, int y){
+		objs.get(indice).movePonto(x, y);
+	}
+	
 	public void deletaPonto(int indice){
 		objs.get(indice).deletarPonto();
 	}

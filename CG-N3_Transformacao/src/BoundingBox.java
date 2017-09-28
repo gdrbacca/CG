@@ -40,9 +40,10 @@ public final class BoundingBox {
 		System.err.println(arrayPtos.size());
 		this.menorX = arrayPtos.get(0).obterX();
 		this.menorY = arrayPtos.get(0).obterY();
+		this.maiorX = arrayPtos.get(0).obterX();
+		this.maiorY = arrayPtos.get(0).obterY();
 		for(Ponto4D ptos : arrayPtos){
-			System.out.println("size:");
-			
+			//System.out.println("size:");
 			if(ptos.obterX() > this.maiorX)
 				this.maiorX = ptos.obterX();
 			else if(ptos.obterX() < this.menorX)
