@@ -28,6 +28,8 @@ public class Main implements KeyListener,
 	private int indiceObj = -1;
 	private boolean criaObj = false;
 	private boolean selectVertice = false;
+	int antigoX, antigoY;
+	Ponto4D pSelecionado = new Ponto4D();
 	private Mundo mundo = new Mundo();
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
 
@@ -197,7 +199,12 @@ public class Main implements KeyListener,
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if(selectVertice){
-			mundo.movePonto(indiceObj, arg0.getX(), arg0.getY());
+			int movtoX = arg0.getX() - antigoX;
+			int movtoY = arg0.getY() - antigoY;
+			mundo.movePonto(movtoX, movtoY);
+			
+			antigoX = arg0.getX();
+			antigoY = arg0.getY();
 			glDrawable.display();
 		}
 	}
@@ -242,7 +249,10 @@ public class Main implements KeyListener,
 
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if(selectVertice){
+			antigoX = arg0.getX();
+			antigoY = arg0.getY();
+		}
 	}
 
 	public void mouseReleased(MouseEvent arg0) {

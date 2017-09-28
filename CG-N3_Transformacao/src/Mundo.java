@@ -17,7 +17,7 @@ public class Mundo{
 	
 	
 	private ArrayList<ObjetoGrafico> objs;
-
+	private ObjetoGrafico objetoSelecionado;
 	
 	public Mundo(){
 		objs = new ArrayList<ObjetoGrafico>();
@@ -57,8 +57,10 @@ public class Mundo{
 	
 	public void atribuiSelecionado(int indice){
 		for (int i = 0; i < objs.size(); i++) {
-			if(i == indice)
+			if(i == indice){
 				objs.get(i).setSelecionado(true);
+				objetoSelecionado = objs.get(i);
+			}
 			else
 				objs.get(i).setSelecionado(false);
 		}
@@ -68,12 +70,12 @@ public class Mundo{
 		objs.get(objs.size()-1).deslizaPonto(x, y);
 	}
 	
-	public void selecionaPonto(int indice, int x, int y){
-		objs.get(indice).desenharPonto(x, y);
+	public Ponto4D selecionaPonto(int indice, int x, int y){
+		return objs.get(indice).desenharPonto(x, y);
 	}
 	
-	public void movePonto(int indice, int x, int y){
-		objs.get(indice).movePonto(x, y);
+	public void movePonto(int x, int y){
+		objetoSelecionado.movePonto(x, y);
 	}
 	
 	public void deletaPonto(int indice){

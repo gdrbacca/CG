@@ -122,9 +122,10 @@ public final class ObjetoGrafico {
 		}
 	}
 	
-	public void desenharPonto(int x, int y){
+	public Ponto4D desenharPonto(int x, int y){
 		this.desenhaPonto = true;
-		selecionaPonto(x, y);			
+		selecionaPonto(x, y);
+		return pontoSelecionado;
 	}
 	
 	public void deletarPonto(){
@@ -143,8 +144,8 @@ public final class ObjetoGrafico {
 	
 	public void movePonto(int x, int y){
 		if(pontoSelecionado != null){
-			pontoSelecionado.atribuirX(x);
-			pontoSelecionado.atribuirY(y);
+			pontoSelecionado.atribuirX(pontoSelecionado.obterX() + x);
+			pontoSelecionado.atribuirY(pontoSelecionado.obterY() + y);
 			bbox.atribuirBoundingBox(vertices);
 			desenhaPonto = true;
 		}
