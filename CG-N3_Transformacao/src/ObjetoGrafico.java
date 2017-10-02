@@ -84,6 +84,14 @@ public final class ObjetoGrafico {
 		this.bbox.atribuirBoundingBox(vertices);
 	}
 	
+	public boolean estaDentroBbox(int x, int y){
+		if(x <= bbox.obterMaiorX() && x >= bbox.obterMenorX()){
+			if(y <= bbox.obterMaiorY() && y >= bbox.obterMenorY())
+				return true;
+		}
+		return false;
+	}
+	
 	private void initCores(){
 		this.matCores[0][0] = 0.0f;
 		this.matCores[0][1] = 0.0f;
@@ -122,10 +130,9 @@ public final class ObjetoGrafico {
 		}
 	}
 	
-	public Ponto4D desenharPonto(int x, int y){
+	public void desenharPonto(int x, int y){
 		this.desenhaPonto = true;
 		selecionaPonto(x, y);
-		return pontoSelecionado;
 	}
 	
 	public void deletarPonto(){

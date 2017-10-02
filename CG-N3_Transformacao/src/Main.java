@@ -231,8 +231,12 @@ public class Main implements KeyListener,
 				mundo.selecionaPonto(indiceObj, arg0.getX(), arg0.getY());
 			}
 		}
-		else if(arg0.getButton() == MouseEvent.BUTTON3)
-			System.out.println("btn3");
+		else if(arg0.getButton() == MouseEvent.BUTTON3){
+			int indice = mundo.selecionaObjetoMouse(arg0.getX(), arg0.getY());
+			if(indice != -1)
+				indiceObj = indice;
+			System.out.println("indice selected: "+indice);
+		}
 		
 		glDrawable.display();
 	}

@@ -70,8 +70,8 @@ public class Mundo{
 		objs.get(objs.size()-1).deslizaPonto(x, y);
 	}
 	
-	public Ponto4D selecionaPonto(int indice, int x, int y){
-		return objs.get(indice).desenharPonto(x, y);
+	public void selecionaPonto(int indice, int x, int y){
+		objs.get(indice).desenharPonto(x, y);
 	}
 	
 	public void movePonto(int x, int y){
@@ -81,7 +81,17 @@ public class Mundo{
 	public void deletaPonto(int indice){
 		objs.get(indice).deletarPonto();
 	}
-
 	
+	public int selecionaObjetoMouse(int x, int y){
+		int i = 0;
+		for(;i < objs.size(); i++){
+			if(objs.get(i).estaDentroBbox(x, y)){
+				objetoSelecionado = objs.get(i);
+				atribuiSelecionado(i);
+				return i;
+			}
+		}
+		return -1;
+	}
 	
 }
