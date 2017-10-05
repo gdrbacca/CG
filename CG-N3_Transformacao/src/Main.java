@@ -62,7 +62,6 @@ public class Main implements KeyListener,
 		gl.glPointSize(1.0f);
 		//desenhaSRU();
 		mundo.desenha();
-		//System.out.println("guiguigu");
 
 //		objeto.desenha();
 
@@ -147,11 +146,11 @@ public class Main implements KeyListener,
 				break;
 				
 			case KeyEvent.VK_2:
-				mundo.getObjeto().get(indiceObj).escalaXYZPtoFixo(2.0, new Ponto4D(-200.0,-200.0,0.0,0.0));
+				mundo.getObjeto().get(indiceObj).escalaXYZPtoFixo(1.5, new Ponto4D(-200.0,-200.0,0.0,0.0));
 				break;
 				
 			case KeyEvent.VK_3:
-				mundo.getObjeto().get(indiceObj).rotacaoZPtoFixo(10.0, new Ponto4D(-200.0,-189.0,0.0,0.0));
+				mundo.getObjeto().get(indiceObj).rotacaoZPtoFixo(5.0, new Ponto4D(0.0,0.0,0.0,0.0));
 				break;
 			
 			case KeyEvent.VK_4:

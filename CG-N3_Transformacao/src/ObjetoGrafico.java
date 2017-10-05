@@ -86,8 +86,13 @@ public final class ObjetoGrafico {
 	
 	public boolean estaDentroBbox(int x, int y){
 		if(x <= bbox.obterMaiorX() && x >= bbox.obterMenorX()){
-			if(y <= bbox.obterMaiorY() && y >= bbox.obterMenorY())
+			if(y <= bbox.obterMaiorY() && y >= bbox.obterMenorY()){
+				/*int nInt = 0;
+				for (int i = 0; i < vertices.size(); i++) {
+				}*/
+				
 				return true;
+			}
 		}
 		return false;
 	}
@@ -217,6 +222,11 @@ public final class ObjetoGrafico {
 	}
 
 	public void escalaXYZPtoFixo(double escala, Ponto4D ptoFixo) {
+		bbox.processarCentroBBox();
+		ptoFixo = bbox.obterCentro();
+		ptoFixo.atribuirX(ptoFixo.obterX() *-1);
+		ptoFixo.atribuirY(ptoFixo.obterY() *-1);
+		
 		matrizGlobal.atribuirIdentidade();
 
 		matrizTmpTranslacao.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
@@ -233,6 +243,11 @@ public final class ObjetoGrafico {
 	}
 	
 	public void rotacaoZPtoFixo(double angulo, Ponto4D ptoFixo) {
+		bbox.processarCentroBBox();
+		ptoFixo = bbox.obterCentro();
+		ptoFixo.atribuirX(ptoFixo.obterX() *-1);
+		ptoFixo.atribuirY(ptoFixo.obterY() *-1);
+		
 		matrizGlobal.atribuirIdentidade();
 
 		matrizTmpTranslacao.atribuirTranslacao(ptoFixo.obterX(),ptoFixo.obterY(),ptoFixo.obterZ());
