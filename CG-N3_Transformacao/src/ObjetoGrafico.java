@@ -120,7 +120,7 @@ public final class ObjetoGrafico {
 	
 	public void selecionaPonto(int x, int y){
 		double maiorD = Double.MAX_VALUE;
-		Pronto4D pontoTransform = null;
+		Ponto4D pontoTransform = null;
 		pontoSelecionado = new Ponto4D();
 		for(Ponto4D ptos : vertices){
 			pontoTransform = matrizObjeto.transformPoint(ptos);

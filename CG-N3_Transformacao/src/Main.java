@@ -24,13 +24,15 @@ public class Main implements KeyListener,
 //			new ObjetoGrafico(),
 //			new ObjetoGrafico() };
 	
-	
+	double x1 = 0, y1 = 400, x2 = 378,  y2 = 0;
+	int contZoomIn, contZoomOut = 0;
 	private int indiceObj = -1;
 	private boolean criaObj = false;
 	private boolean selectVertice = false;
 	int antigoX, antigoY;
 	Ponto4D pSelecionado = new Ponto4D();
 	private Mundo mundo = new Mundo();
+	private Camera camera = new Camera(0.0, 400.0, 378.0, 0.0);
 	// "render" feito logo apos a inicializacao do contexto OpenGL.
 
 
@@ -53,27 +55,23 @@ public class Main implements KeyListener,
 	@Override
 	public void display(GLAutoDrawable arg0) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-		glu.gluOrtho2D(0.0f, 400.0f, 378.0f, 0.0f);
-
+		
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		glu.gluOrtho2D(camera.getX1(), camera.getY1(), camera.getX2(), camera.getY2());
+
 
 		gl.glLineWidth(1.0f);
 		gl.glPointSize(1.0f);
-		//desenhaSRU();
+		desenhaSRU();
 		mundo.desenha();
-
-//		objeto.desenha();
 
 		gl.glFlush();
 	}
 
 	@Override
-	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
-		// TODO Auto-generated method stub
-		
+	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {		
 	}
-
 	
 
 	@Override
@@ -120,12 +118,15 @@ public class Main implements KeyListener,
 			case KeyEvent.VK_RIGHT:
 				mundo.getObjeto().get(indiceObj).translacaoXYZ(10.0,0.0,0.0);
 				break;
+				
 			case KeyEvent.VK_LEFT:
 				mundo.getObjeto().get(indiceObj).translacaoXYZ(-10.0,0.0,0.0);
 				break;
+				
 			case KeyEvent.VK_UP:
 				mundo.getObjeto().get(indiceObj).translacaoXYZ(0.0,-10.0,0.0);
 				break;
+				
 			case KeyEvent.VK_DOWN:
 				mundo.getObjeto().get(indiceObj).translacaoXYZ(0.0,10.0,0.0);
 				break;
@@ -133,6 +134,7 @@ public class Main implements KeyListener,
 			case KeyEvent.VK_PAGE_UP:
 				mundo.getObjeto().get(indiceObj).escalaXYZ(1.5,1.5);
 				break;
+				
 			case KeyEvent.VK_PAGE_DOWN:
 				mundo.getObjeto().get(indiceObj).escalaXYZ(0.5,0.5);
 				break;
@@ -165,12 +167,88 @@ public class Main implements KeyListener,
 				break;
 				
 			case KeyEvent.VK_SPACE:
-				//System.out.println("espaço");
 				if(criaObj){
 					criaObj = false;
 					mundo.atribuirBbox();
 					mundo.atribuiSelecionado(indiceObj);
 				}
+				break;
+			
+			case KeyEvent.VK_T:  //zoom out
+				if(contZoomOut < 10){
+					x1 -= 10;
+					y1 += 10;
+					x2 += 10;
+					y2 -= 10;
+					camera.setX1(x1);
+					camera.setY1(y1);
+					camera.setX2(x2);
+					camera.setY2(y2);
+					contZoomOut+=1;
+					contZoomIn-=1;
+				}
+				break;
+			
+			case KeyEvent.VK_H:  //zoom in
+				if(contZoomIn < 10){
+					x1 += 10;
+					y1 -= 10;
+					x2 -= 10;
+					y2 += 10;
+					camera.setX1(x1);
+		            camera.setY1(y1);
+		            camera.setX2(x2);
+		            camera.setY2(y2);
+		            contZoomIn+=1;
+		            contZoomOut-=1;
+				}
+				break;
+				
+			case KeyEvent.VK_Y:  //cima
+				if(camera.getY2() < 200){
+					x2 += 10;
+					y2 += 10;
+					camera.setX2(x2);
+					camera.setY2(y2);
+				}
+				break;
+				
+			case KeyEvent.VK_N:  //baixo
+				if(camera.getY2() > -200){
+					x2 -= 10;
+					y2 -= 10;
+					camera.setX2(x2);
+					camera.setY2(y2);
+				}
+				break;
+				
+			case KeyEvent.VK_G:  //esquerda
+				if(y1 < 600){
+					x1 += 10;
+					y1 += 10;
+					camera.setX1(x1);
+					camera.setY1(y1);
+				}
+				break;
+				
+			case KeyEvent.VK_J:  //direita
+				if(y1 > 200){
+					x1 -= 10;
+					y1 -= 10;
+					camera.setX1(x1);
+					camera.setY1(y1);
+				}
+				break;
+				
+			case KeyEvent.VK_U:  //centraliza
+				x1 = 0;
+				y1 = 400;
+				x2 = 378;
+				y2 = 0;
+				camera.setX1(x1);
+				camera.setX2(x2);
+				camera.setY1(y1);
+				camera.setY2(y2);
 				break;
 			}
 		}
@@ -178,25 +256,13 @@ public class Main implements KeyListener,
 		glDrawable.display();
 	}
 
-	// metodo definido na interface GLEventListener.
-	// "render" feito depois que a janela foi redimensionada.
-
-
-	// metodo definido na interface GLEventListener.
-	// "render" feito quando o modo ou dispositivo de exibicao associado foi
-	// alterado.
-
-
 	public void keyReleased(KeyEvent arg0) {
-		// System.out.println(" --- keyReleased ---");
 	}
 
 	public void keyTyped(KeyEvent arg0) {
-		// System.out.println(" --- keyTyped ---");
 	}
 
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		if(selectVertice){
 			int movtoX = arg0.getX() - antigoX;
 			int movtoY = arg0.getY() - antigoY;
@@ -209,7 +275,6 @@ public class Main implements KeyListener,
 	}
 
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		if(mundo.getObjeto().size() > 0 && criaObj){
 			mundo.deslizaPontoObj(arg0.getX(), arg0.getY());
 			glDrawable.display();
@@ -217,7 +282,6 @@ public class Main implements KeyListener,
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		System.out.println((arg0.getX())+" "+(arg0.getY()));
 		if(arg0.getButton() == MouseEvent.BUTTON1){
 			if(!selectVertice){
@@ -241,26 +305,19 @@ public class Main implements KeyListener,
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseExited(MouseEvent arg0) {		
 	}
 
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		if(selectVertice){
 			antigoX = arg0.getX();
 			antigoY = arg0.getY();
 		}
 	}
 
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mouseReleased(MouseEvent arg0) {		
 	}
 
 	public void desenhaSRU() {
