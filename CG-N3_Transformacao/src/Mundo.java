@@ -82,10 +82,10 @@ public class Mundo{
 		objs.get(indice).deletarPonto();
 	}
 	
-	public int selecionaObjetoMouse(int x, int y){
+	public int selecionaObjetoMouse(double x, double y){
 		int i = 0;
 		for(;i < objs.size(); i++){
-			if(objs.get(i).estaDentroBbox(x, y)){
+			if(objs.get(i).estaDentroObj(x, y)){
 				objetoSelecionado = objs.get(i);
 				atribuiSelecionado(i);
 				return i;

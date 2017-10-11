@@ -84,17 +84,45 @@ public final class ObjetoGrafico {
 		this.bbox.atribuirBoundingBox(vertices);
 	}
 	
-	public boolean estaDentroBbox(int x, int y){
+	public boolean estaDentroObj(double x, double y){
+		Ponto4D p1 = null;
+		Ponto4D p2 = null;
+		int nInt = 0;
 		if(x <= bbox.obterMaiorX() && x >= bbox.obterMenorX()){
-			if(y <= bbox.obterMaiorY() && y >= bbox.obterMenorY()){
-				/*int nInt = 0;
+			if(y <= bbox.obterMaiorY() && y >= bbox.obterMenorY()){  //esta dentro bbox
+				System.err.println("esta dentro bbox");
 				for (int i = 0; i < vertices.size(); i++) {
-				}*/
+					if(i+1 < vertices.size()){
+						p1 = vertices.get(i);
+						p2 = vertices.get(i+1);
+						
+					}else{
+						p1 = vertices.get(i);
+						p2 = vertices.get(0);
+					}
+					if(p1.obterY() != p2.obterY()){
+						double ti = temInterseccao(y, p1.obterY(), p2.obterY());
+						if(ti >= 0 && ti <= 1){
+							double xi = p1.obterX() + (p2.obterX() - p1.obterX()) * ti;
+							if(xi > x){
+								nInt++;
+							}
+						}
+					}
+				}
 				
-				return true;
 			}
 		}
-		return false;
+		if(nInt % 2 != 0){
+			System.out.println("esta dentro");
+				return true;
+		}
+			else
+				return false;
+	}
+	
+	private double temInterseccao(double yi, double y1, double y2){
+		return (yi - y1) / (y2 - y1);
 	}
 	
 	private void initCores(){

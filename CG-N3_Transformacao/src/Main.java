@@ -4,12 +4,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.awt.Point;
 
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+
 
 public class Main implements KeyListener,
 							MouseListener, MouseMotionListener, GLEventListener  {
@@ -295,7 +297,8 @@ public class Main implements KeyListener,
 			}
 		}
 		else if(arg0.getButton() == MouseEvent.BUTTON3){
-			int indice = mundo.selecionaObjetoMouse(arg0.getX(), arg0.getY());
+			Point p = arg0.getPoint();
+			int indice = mundo.selecionaObjetoMouse(p.getX(), p.getY());
 			if(indice != -1)
 				indiceObj = indice;
 			System.out.println("indice selected: "+indice);
