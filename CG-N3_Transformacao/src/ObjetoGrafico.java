@@ -19,6 +19,7 @@ public final class ObjetoGrafico {
 	private Transformacao4D matrizObjeto = new Transformacao4D();
 	private BoundingBox bbox = null;
 	private Ponto4D pontoSelecionado = null;
+	private ArrayList<ObjetoGrafico> objetos = new ArrayList();
 	
 	/// Matrizes temporarias que sempre sao inicializadas com matriz Identidade entao podem ser "static".
 	private static Transformacao4D matrizTmpTranslacao = new Transformacao4D();
@@ -32,6 +33,9 @@ public final class ObjetoGrafico {
 	private float[][] matCores = new float[4][4];
 	private boolean selecionado = false;
 	private boolean desenhaPonto = false;
+	private boolean ehFilho = false;
+	private int numeroObjeto = -1;
+	private int numeroPai = -1;
 	
 	public ObjetoGrafico() {
 		initCores();
@@ -47,6 +51,10 @@ public final class ObjetoGrafico {
 
 	public void setSelecionado(boolean selecionado){
 		this.selecionado = selecionado;
+	}
+	
+	public void adicionaFilho(ObjetoGrafico filho){
+		this.objetos.add(filho);
 	}
 	
 	public void trocarPrimitiva(){
@@ -199,12 +207,10 @@ public final class ObjetoGrafico {
 		gl.glLineWidth(tamanho);
 		gl.glPointSize(tamanho);
 
+		//gl.glLoadIdentity();
 		gl.glPushMatrix();
 			gl.glMultMatrixd(matrizObjeto.GetDate(), 0);
 			gl.glBegin(primitiva);
-//			System.out.println(vertices.size());
-//			System.out.println(vertices.get(0).obterX()+" "+vertices.get(0).obterY());
-//			System.out.println(vertices.get(1).obterX()+" "+vertices.get(1).obterY());
 				for (int i=0; i < vertices.size(); i++) {
 					gl.glVertex2d(vertices.get(i).obterX(), vertices.get(i).obterY());
 				}
@@ -222,7 +228,10 @@ public final class ObjetoGrafico {
 				desenhaPonto = false;
 			}
 			//////////// ATENCAO: chamar desenho dos filhos... 
-
+			for(int i = 0; i < objetos.size(); i++){
+				objetos.get(i).desenha();
+			}
+			
 		gl.glPopMatrix();
 	}
 
@@ -301,10 +310,35 @@ public final class ObjetoGrafico {
 		for (int i = 0; i < vertices.size(); i++) {
 			System.out.println("P0[" + vertices.get(i).obterX() + "," + vertices.get(i).obterY()+ "]");
 		}
-//		
 //		System.out.println("anguloGlobal:" + anguloGlobal);
 	}
-
 	
+	public ArrayList<ObjetoGrafico> getFilhos(){
+		return this.objetos;
+	}
+
+	public void ehFilho(boolean ehFilho){
+		this.ehFilho = ehFilho;
+	}
+	
+	public boolean getEhFilho(){
+		return this.ehFilho;
+	}
+	
+	public void setNumeroObjeto(int num){
+		this.numeroObjeto = num;
+	}
+	
+	public int getNumeroObjeto(){
+		return this.numeroObjeto;
+	}
+	
+	public void setNumeroPai(int num){
+		this.numeroPai = num;
+	}
+	
+	public int getNumeroPai(){
+		return this.numeroPai;
+	}
 }
 

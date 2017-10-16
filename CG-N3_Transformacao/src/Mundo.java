@@ -18,6 +18,8 @@ public class Mundo{
 	
 	private ArrayList<ObjetoGrafico> objs;
 	private ObjetoGrafico objetoSelecionado;
+	private int numObjetos = -1;
+	
 	
 	public Mundo(){
 		objs = new ArrayList<ObjetoGrafico>();
@@ -28,8 +30,32 @@ public class Mundo{
 		return this.objs;
 	}
 	
+	public int remove(){
+		for (int i = 0; i < objs.size(); i++) {
+			if(objetoSelecionado == objs.get(i)){
+				if(objetoSelecionado.getEhFilho()){
+					int numPai = objetoSelecionado.getNumeroPai();
+					for (int j = 0; j < objs.size(); j++) {
+						if(objs.get(j).getNumeroObjeto() == numPai){
+							//System.err.println("removeu do pai "+numPai);
+							objs.get(j).getFilhos().remove(objetoSelecionado);
+						}
+					}
+				}
+				objs.remove(objetoSelecionado);
+				if(objs.size() > 0){
+					objetoSelecionado = objs.get(objs.size() - 1);
+					return objs.size() - 1;
+				}
+			}
+		}
+		return -1;
+	}
+	
 	public void desenha(){
 		for (byte i=0; i < objs.size(); i++) {
+			if(objs.get(i).getEhFilho())
+				continue;
 			objs.get(i).desenha();
 		}
 	}
@@ -38,15 +64,16 @@ public class Mundo{
 		Ponto4D pto = new Ponto4D(x, y, 0, 1);
 		int indice = indiceObj;
 		if(!cria){
-			ObjetoGrafico obj = new ObjetoGrafico();
-			obj.atribuirGL(gl);
-			obj.addPonto(pto);
-			objs.add(obj);
+			ObjetoGrafico objetoTemp = new ObjetoGrafico();
+			objetoTemp.atribuirGL(gl);
+			objetoTemp.addPonto(pto);
+			objetoTemp.setNumeroObjeto(++numObjetos);
+			objs.add(objetoTemp);
 			indice = objs.size()-1;
 			return indice;
 		}
 		else{
-			objs.get(objs.size()-1).addPonto(pto);
+			objs.get(indice).addPonto(pto);
 			return indice;
 		}
 	}
@@ -55,16 +82,22 @@ public class Mundo{
 		objs.get(objs.size()-1).atribuirBbox();
 	}
 	
-	public void atribuiSelecionado(int indice){
+	public void atribuiSelecionado(int indice, boolean filho){
 		for (int i = 0; i < objs.size(); i++) {
 			if(i == indice){
 				objs.get(i).setSelecionado(true);
-				objetoSelecionado = objs.get(i);
+				if(filho && objetoSelecionado != null){
+					objs.get(indice).ehFilho(true);
+					objs.get(indice).setNumeroPai(objetoSelecionado.getNumeroObjeto());
+					objetoSelecionado.adicionaFilho(objs.get(indice));
+				}
+				objetoSelecionado = objs.get(indice);
 			}
 			else
 				objs.get(i).setSelecionado(false);
 		}
 	}
+	
 	
 	public void deslizaPontoObj(int x, int y){
 		objs.get(objs.size()-1).deslizaPonto(x, y);
@@ -87,7 +120,7 @@ public class Mundo{
 		for(;i < objs.size(); i++){
 			if(objs.get(i).estaDentroObj(x, y)){
 				objetoSelecionado = objs.get(i);
-				atribuiSelecionado(i);
+				atribuiSelecionado(i, false);
 				return i;
 			}
 		}

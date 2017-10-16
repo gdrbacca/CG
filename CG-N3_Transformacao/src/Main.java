@@ -11,6 +11,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import javax.swing.JOptionPane;
 
 
 public class Main implements KeyListener,
@@ -26,11 +27,11 @@ public class Main implements KeyListener,
 //			new ObjetoGrafico(),
 //			new ObjetoGrafico() };
 	
-	double x1 = 0, y1 = 400, x2 = 378,  y2 = 0;
 	int contZoomIn, contZoomOut = 0;
 	private int indiceObj = -1;
 	private boolean criaObj = false;
 	private boolean selectVertice = false;
+	private boolean criaFilho = false;
 	int antigoX, antigoY;
 	Ponto4D pSelecionado = new Ponto4D();
 	private Mundo mundo = new Mundo();
@@ -105,9 +106,12 @@ public class Main implements KeyListener,
 				
 			case KeyEvent.VK_D:
 				if(!selectVertice){
-					mundo.getObjeto().remove(indiceObj);
-					indiceObj = mundo.getObjeto().size()-1;
-					mundo.atribuiSelecionado(indiceObj);
+					indiceObj = mundo.remove();
+					if(criaFilho)
+						JOptionPane.showMessageDialog(null, "A criação de filhos foi desativada.");
+					
+					criaFilho = false;
+					mundo.atribuiSelecionado(indiceObj, false);
 				} else{
 					mundo.deletaPonto(indiceObj);
 				}
@@ -161,31 +165,37 @@ public class Main implements KeyListener,
 				indiceObj++;
 				if(indiceObj > mundo.getObjeto().size() - 1)
 					indiceObj = 0;
-				mundo.atribuiSelecionado(indiceObj);
+				mundo.atribuiSelecionado(indiceObj, false);
 				break;
 				
 			case KeyEvent.VK_5:
 				mundo.getObjeto().get(indiceObj).trocaCor();
 				break;
 				
+			case  KeyEvent.VK_F:
+				if(indiceObj >= 0){
+					criaFilho = !criaFilho;
+					if(criaFilho)
+						JOptionPane.showMessageDialog(null, "A criação de filhos foi ativada.");
+					else
+						JOptionPane.showMessageDialog(null, "A criação de filhos foi desativada.");
+				}
+				break;
+				
 			case KeyEvent.VK_SPACE:
 				if(criaObj){
 					criaObj = false;
 					mundo.atribuirBbox();
-					mundo.atribuiSelecionado(indiceObj);
+					mundo.atribuiSelecionado(indiceObj, criaFilho);
 				}
 				break;
 			
 			case KeyEvent.VK_T:  //zoom out
 				if(contZoomOut < 10){
-					x1 -= 10;
-					y1 += 10;
-					x2 += 10;
-					y2 -= 10;
-					camera.setX1(x1);
-					camera.setY1(y1);
-					camera.setX2(x2);
-					camera.setY2(y2);
+					camera.setX1(camera.getX1() - 10);
+					camera.setY1(camera.getY1() + 10);
+					camera.setX2(camera.getX2() + 10);
+					camera.setY2(camera.getY2() - 10);
 					contZoomOut+=1;
 					contZoomIn-=1;
 				}
@@ -193,14 +203,10 @@ public class Main implements KeyListener,
 			
 			case KeyEvent.VK_H:  //zoom in
 				if(contZoomIn < 10){
-					x1 += 10;
-					y1 -= 10;
-					x2 -= 10;
-					y2 += 10;
-					camera.setX1(x1);
-		            camera.setY1(y1);
-		            camera.setX2(x2);
-		            camera.setY2(y2);
+		            camera.setX1(camera.getX1() + 10);
+		            camera.setY1(camera.getY1() - 10);
+		            camera.setX2(camera.getX2() - 10);
+		            camera.setY2(camera.getY2() + 10);
 		            contZoomIn+=1;
 		            contZoomOut-=1;
 				}
@@ -208,49 +214,37 @@ public class Main implements KeyListener,
 				
 			case KeyEvent.VK_Y:  //cima
 				if(camera.getY2() < 200){
-					x2 += 10;
-					y2 += 10;
-					camera.setX2(x2);
-					camera.setY2(y2);
+					camera.setX2(camera.getX2() + 10);
+					camera.setY2(camera.getY2() + 10);
 				}
 				break;
 				
 			case KeyEvent.VK_N:  //baixo
 				if(camera.getY2() > -200){
-					x2 -= 10;
-					y2 -= 10;
-					camera.setX2(x2);
-					camera.setY2(y2);
+					camera.setX2(camera.getX2() - 10);
+					camera.setY2(camera.getY2() - 10);
 				}
 				break;
 				
 			case KeyEvent.VK_G:  //esquerda
-				if(y1 < 600){
-					x1 += 10;
-					y1 += 10;
-					camera.setX1(x1);
-					camera.setY1(y1);
+				if(camera.getY1() < 600){
+					camera.setX1(camera.getX1() + 10);
+					camera.setY1(camera.getY1() + 10);
 				}
 				break;
 				
 			case KeyEvent.VK_J:  //direita
-				if(y1 > 200){
-					x1 -= 10;
-					y1 -= 10;
-					camera.setX1(x1);
-					camera.setY1(y1);
+				if(camera.getY1() > 200){
+					camera.setX1(camera.getX1() - 10);
+					camera.setY1(camera.getY1() - 10);
 				}
 				break;
 				
 			case KeyEvent.VK_U:  //centraliza
-				x1 = 0;
-				y1 = 400;
-				x2 = 378;
-				y2 = 0;
-				camera.setX1(x1);
-				camera.setX2(x2);
-				camera.setY1(y1);
-				camera.setY2(y2);
+				camera.setX1(0.0);
+				camera.setX2(400.0);
+				camera.setY1(378.0);
+				camera.setY2(0.0);
 				break;
 			}
 		}
@@ -288,6 +282,7 @@ public class Main implements KeyListener,
 		if(arg0.getButton() == MouseEvent.BUTTON1){
 			if(!selectVertice){
 				indiceObj = mundo.criaObj(criaObj, arg0.getX(), arg0.getY(), gl, indiceObj);
+				//System.err.println("criei");
 				if(!criaObj){
 					criaObj = true;
 				}
