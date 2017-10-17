@@ -30,6 +30,10 @@ public class Mundo{
 		return this.objs;
 	}
 	
+	/**
+	 * Remove o objeto selecionado e seus respectivos filhos.
+	 * @return Retorna o indice do último poligono da lista, que por sua vez, será o novo selecionado 
+	 */
 	public int remove(){
 		for (int i = 0; i < objs.size(); i++) {
 			if(objetoSelecionado == objs.get(i)){
@@ -52,6 +56,9 @@ public class Mundo{
 		return -1;
 	}
 	
+	/**
+	 * Desenha os poligonos da lista de poligonos.
+	 */
 	public void desenha(){
 		for (byte i=0; i < objs.size(); i++) {
 			if(objs.get(i).getEhFilho())
@@ -60,6 +67,15 @@ public class Mundo{
 		}
 	}
 	
+	/**
+	 * Usado para criar o poligono e adicionar seus vertices.
+	 * @param cria true se ele estiver criando o poligono, false se estiver apenas adicionando vertice.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 * @param gl O GL usado para desenhar, que será atribuido ao poligono.
+	 * @param indiceObj O último indice da lista atual de poligonos.
+	 * @return O novo indice do poligono selecionado
+	 */
 	public int criaObj(boolean cria, int x, int y, GL gl, int indiceObj){
 		Ponto4D pto = new Ponto4D(x, y, 0, 1);
 		int indice = indiceObj;
@@ -82,6 +98,11 @@ public class Mundo{
 		objs.get(objs.size()-1).atribuirBbox();
 	}
 	
+	/**
+	 * Atribui o estado de selecionado ao poligono que foi selecionado.
+	 * @param indice O indice do poligono que foi selecionado.
+	 * @param filho true se tiver um pai, e false se não.
+	 */
 	public void atribuiSelecionado(int indice, boolean filho){
 		for (int i = 0; i < objs.size(); i++) {
 			if(i == indice){
@@ -115,6 +136,12 @@ public class Mundo{
 		objs.get(indice).deletarPonto();
 	}
 	
+	/**
+	 * Verifica se o clique do mouse está dentro de um poligono.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 * @return O indice do poligono selecionado. -1 se nenhum poligono foi selecionado
+	 */
 	public int selecionaObjetoMouse(double x, double y){
 		int i = 0;
 		for(;i < objs.size(); i++){

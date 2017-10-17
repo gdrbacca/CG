@@ -48,15 +48,26 @@ public final class ObjetoGrafico {
 	public double obterTamanho() {
 		return tamanho;
 	}
-
+	
+	/**
+	 * Colocar o poligono em modo selecionado.
+	 * @param selecionado true se é selecionado, false se não.
+	 */	
 	public void setSelecionado(boolean selecionado){
 		this.selecionado = selecionado;
 	}
 	
+	/**
+	 * Adicionar poligono filho ao poligono selecionado.
+	 * @param filho poligono a ser adicionado ao pai.
+	 */	
 	public void adicionaFilho(ObjetoGrafico filho){
 		this.objetos.add(filho);
 	}
 	
+	/**
+	 * Alterna o poligono entre poligono fechado e poligono aberto.
+	 */	
 	public void trocarPrimitiva(){
 		if(primitiva == GL.GL_LINE_LOOP)
 			primitiva = GL.GL_LINE_STRIP;
@@ -68,6 +79,10 @@ public final class ObjetoGrafico {
 		return primitiva;
 	}
 	
+	/**
+	 * Adiciona um novo vertice ao poligono.
+	 * @param pto vertice a ser adicionado.
+	 */	
 	public void addPonto(Ponto4D pto){
 		if(vertices.size()<=1){
 			System.out.println("adddou primeiro");
@@ -80,6 +95,11 @@ public final class ObjetoGrafico {
 		}
 	}
 	
+	/**
+	 * Desenha o vertice antes da confirmação, para poder mover o mouse enquanto desenha.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 */	
 	public void deslizaPonto(double x, double y){
 		this.vertices.get(vertices.size()-1).atribuirX(x);
 		this.vertices.get(vertices.size()-1).atribuirY(y);
@@ -92,6 +112,12 @@ public final class ObjetoGrafico {
 		this.bbox.atribuirBoundingBox(vertices);
 	}
 	
+	/**
+	 * Verifica se o ponto de clique está dentro do poligono.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 * @return true se está dentro false se não está. 
+	 */
 	public boolean estaDentroObj(double x, double y){
 		Ponto4D p1 = null;
 		Ponto4D p2 = null;
@@ -148,12 +174,20 @@ public final class ObjetoGrafico {
 		this.matCores[3][2] = 0.5f;
 	}
 	
+	/**
+	 * Alternar as cores do poligono entre as cores disponíveis.
+	 */
 	public void trocaCor(){
 		this.cor++;
 		if(this.cor > 3)
 			this.cor = 0;
 	}
 	
+	/**
+	 * Seleciona um vertice do poligono.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 */
 	public void selecionaPonto(int x, int y){
 		double maiorD = Double.MAX_VALUE;
 		Ponto4D pontoTransform = null;
@@ -178,6 +212,9 @@ public final class ObjetoGrafico {
 		selecionaPonto(x, y);
 	}
 	
+	/**
+	 * Remove o ponto selecionado.
+	 */
 	public void deletarPonto(){
 		if(pontoSelecionado != null){
 			//System.out.println("ponto removido: "+pontoSelecionado.obterX()+" "+
@@ -192,6 +229,11 @@ public final class ObjetoGrafico {
 		}
 	}
 	
+	/**
+	 * Move o vertice selecionado.
+	 * @param x coordenada x.
+	 * @param y coordenada y.
+	 */
 	public void movePonto(int x, int y){
 		if(pontoSelecionado != null){
 			pontoSelecionado.atribuirX(pontoSelecionado.obterX() + x);
@@ -201,6 +243,9 @@ public final class ObjetoGrafico {
 		}
 	}
 	
+	/**
+	 * Desenha o poligono e seus respectivos filhos.
+	 */
 	public void desenha() {
 		
 		gl.glColor3f(matCores[cor][0], matCores[cor][1], matCores[cor][2]);
@@ -260,6 +305,11 @@ public final class ObjetoGrafico {
 		matrizObjeto.atribuirIdentidade();
 	}
 
+	/**
+	 * Aumenta e diminui a escala do poligono em relação ao centro de sua Bounding Box.
+	 * @param escala A escala de aumento ou diminuição.
+	 * @param ptoFixo O ponto que será usado para basear a escala.
+	 */
 	public void escalaXYZPtoFixo(double escala, Ponto4D ptoFixo) {
 		bbox.processarCentroBBox();
 		ptoFixo = bbox.obterCentro();
@@ -281,6 +331,11 @@ public final class ObjetoGrafico {
 		matrizObjeto = matrizObjeto.transformMatrix(matrizGlobal);
 	}
 	
+	/**
+	 * Rotaciona o poligono em relação ao centro de sua Bounding Box.
+	 * @param angulo O angulo de rotação.
+	 * @param ptoFixo O ponto que será usado para basear a rotação.
+	 */
 	public void rotacaoZPtoFixo(double angulo, Ponto4D ptoFixo) {
 		bbox.processarCentroBBox();
 		ptoFixo = bbox.obterCentro();
